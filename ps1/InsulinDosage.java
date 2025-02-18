@@ -40,22 +40,20 @@ import java.util.*;
          /*
           * TO DO: complete the rest of the program below.
           */
-        double dossage = (currentSugar - targetSugar) / 55.0 + (carbEquiv / (double) carbConsume) - exercise;
+        double dossage = (currentSugar - targetSugar) / 55.0 + (carbConsume / (double) carbEquiv) - exercise;
         if (dossage == 1.0) {
             System.out.println("recommended dosage: 1 unit");
         }
         else if (dossage <= 0.0) {
             System.out.println("recommended dosage: 0 units");
         }
-        else if ((int) dossage == dossage) {
+        else if (dossage % 1 == 0) {
             System.out.println("recommended dosage: " + (int) dossage + " units");
         }
         else {
             System.out.println("recommended dosage: " + dossage + " units");
         }
- 
-     
- 
+        
          // Leave this line unchanged.
          scanner.close();
      }

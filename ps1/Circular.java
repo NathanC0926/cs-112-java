@@ -19,9 +19,9 @@ public class Circular {
         System.out.print("Enter the diameter of the piece of land (specified to the nearest foot): ");
         int diameter = scanner.nextInt();
 
-        final double pi = Math.PI;
+        final double PI = Math.PI;
         double radius = diameter / 2.0;
-        double area = pi * radius * radius;
+        double area = PI * radius * radius;
 
         int roundedArea = (int) Math.round(area);
         int squareYards = roundedArea / 9;  
