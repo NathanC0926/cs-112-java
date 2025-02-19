@@ -1,4 +1,4 @@
-package week1;
+package lab1;
 import java.util.*;
 
 public class Greeting2 {

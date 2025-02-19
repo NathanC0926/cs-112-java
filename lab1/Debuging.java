@@ -1,4 +1,4 @@
-package week1;
+package lab1;
 /* 
  * Lab 1 - Debugging Exercise
  * 
