@@ -40,8 +40,8 @@ public class StringRecursion {
         if (str1.equals("")) return str2;
         if (str2.equals("")) return str1;
 
-        String res = "";
-        res 
+        String res = str1.charAt(0) + "" + str2.charAt(0);
+        return res + weave(str1.substring(1), str2.substring(1)); 
         
     }
 
@@ -52,5 +52,6 @@ public class StringRecursion {
         System.out.println("hi");
         System.out.println(find('a', "gaybi"));
         System.out.println(find('x', "gaybi"));
+        System.out.println(weave("hello", "hoooooo"));
     }
 }
