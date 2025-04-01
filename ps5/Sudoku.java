@@ -42,6 +42,8 @@ public class Sudoku {
      * otherwise.
      */
     private boolean[][][] subgridHasVal;
+    private boolean[][] rowHasVal;
+    private boolean[][] colHasVal;
 
     /*** ADD YOUR ADDITIONAL FIELDS HERE. ***/
 
@@ -59,8 +61,11 @@ public class Sudoku {
          * (1 through 9) as indices.
          */
         this.subgridHasVal = new boolean[3][3][10];
+        this.rowHasVal = new boolean[9][10];
+        this.colHasVal = new boolean[9][10];
 
         /*** INITIALIZE YOUR ADDITIONAL FIELDS HERE. ***/
+
     }
 
     /*
@@ -72,6 +77,8 @@ public class Sudoku {
         this.subgridHasVal[row / 3][col / 3][val] = true;
 
         /*** UPDATE YOUR ADDITIONAL FIELDS HERE. ***/
+        this.rowHasVal[row][val] = true;
+        this.colHasVal[col][val] = true;
     }
 
     /*
@@ -83,18 +90,13 @@ public class Sudoku {
         this.subgridHasVal[row / 3][col / 3][val] = false;
 
         /*** UPDATE YOUR ADDITIONAL FIELDS HERE. ***/
+        this.rowHasVal[row][val] = false;
+        this.colHasVal[col][val] = false;
     }
 
     private boolean isValid(int val, int row, int col) {
-        // checks is that number valid on position row, col
-        if (this.subgridHasVal[row / 3][col / 3][val])
+        if (this.rowHasVal[row][val] || this.colHasVal[col][val] || this.subgridHasVal[row / 3][col / 3][val]) {
             return false;
-
-        for (int i = 0; i < 9; i++) {
-            if (this.grid[i][col] == val)
-                return false;
-            if (this.grid[row][i] == val)
-                return false;
         }
         return true;
     }
@@ -117,7 +119,7 @@ public class Sudoku {
                     this.valIsFixed[r][c] = true;
                 }
             }
-            //input.nextLine();
+             input.nextLine();
         }
     }
 
@@ -174,7 +176,8 @@ public class Sudoku {
          * compile. Replace it with your full implementation of the
          * recursive-backtracking method.
          */
-        if (n == 81) return true;
+        if (n == 81)
+            return true;
         int row = n / 9;
         int col = n % 9;
 
@@ -183,10 +186,10 @@ public class Sudoku {
         for (int i = 1; i < 10; i++) {
             if (isValid(i, row, col)) {
                 placeVal(i, row, col);
-                if (solveRB(n + 1)){
+                if (solveRB(n + 1)) {
                     return true;
                 }
-                removeVal(i,row,col);   
+                removeVal(i, row, col);
             }
         }
         return false;

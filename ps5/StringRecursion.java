@@ -29,7 +29,7 @@ public class StringRecursion {
     }
 
     public static int find(char ch, String str){
-        if (str.equals("") || str == null) return -1;
+        if (str == null || str.equals("")) return -1;
         if (str.charAt(0) == ch) return 0;
         int i = find(ch, str.substring(1));
         if (i == -1) return -1; 
@@ -49,12 +49,5 @@ public class StringRecursion {
     }
 
     public static void main(String[] args) {
-        printReverse("imgay");
-        System.out.println(); // Add this line to create a new line
-        System.out.println("hi" + trim("   IM SOO      GAY                           ") + "hih");
-        System.out.println("hi");
-        System.out.println(find('a', "gaybi"));
-        System.out.println(find('x', "gaybi"));
-        System.out.println(weave("hello", "hoooooo"));
     }
 }

@@ -16,6 +16,9 @@ public class GenerateSums {
         return res;
     }
     public static void main(String[] args) {
-        System.out.println(generateSums(1));
+        System.out.println("n = 1:\n" + generateSums(1));
+        System.out.println("\nn = 4:\n" + generateSums(4));
+        System.out.println("\nn = 6:\n" + generateSums(6));
+        
     }
 }
