@@ -4,26 +4,20 @@ import java.util.*;
 
 public class PairFinder {
     public static void findPairSums(int k, int[] arr) {
+        if (arr == null) throw new IllegalArgumentException("");
         // 2sum brute force
         for (int i = 0; i < arr.length; i++) {
-            // skip dulp for i
-            if (i != 0 && arr[i] == arr[i - 1]) {
-                continue;
-            }
-            for (int j = i; j < arr.length; j++) {
-                // skip dulp for j
-                if (j != 0 && arr[j] == arr[j - 1]) {
-                    continue;
-                }
+            for (int j = i + 1; j < arr.length; j++) {
                 if (arr[i] + arr[j] == k) {
                     System.out.println(arr[i] + " + " + arr[j] + " = " + k);
                 }
             }
-
         }
-    }
+
+    }   
 
     public static void findPairSumsFaster(int k, int[] arr) {
+        if (arr == null) throw new IllegalArgumentException("");
         Sort.mergeSort(arr);
         int l = 0;
         int r = arr.length - 1;
@@ -33,12 +27,16 @@ public class PairFinder {
             } else if (arr[l] + arr[r] < k) {
                 l++;
             } else {
-                // skip dulp
-                // if not (in bound and the prev element is the same with the curr element)
-                if (!((l != 0 && r != arr.length - 1) && (arr[l] == arr[l - 1] && arr[r] == arr[r + 1])))
-                    System.out.println(arr[l] + " + " + arr[r] + " = " + k);
-                l++;
-                r--;
+                System.out.println(arr[l] + " + " + arr[r] + " = " + k);
+
+                // Skip duplicates from the left
+                int leftVal = arr[l];
+                while (l < r && arr[l] == leftVal)
+                    l++;
+                // Skip duplicates from the right
+                int rightVal = arr[r];
+                while (l < r && arr[r] == rightVal)
+                    r--;
             }
         }
     }

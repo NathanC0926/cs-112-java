@@ -23,6 +23,8 @@ import java.util.*;
  * approach allows us to use recursion to write many of the methods,
  * and it also allows the methods to handle empty strings, which are
  * represented using a value of null.
+ * 
+ * 
  */
 public class StringNode {
     private char ch;
@@ -94,38 +96,38 @@ public class StringNode {
      * copy - returns a copy of the given linked-list string
      */
     public static StringNode copy(StringNode str) {
-        StringNode res = new StringNode(str.ch, null); //first node of the copy
-        
-        StringNode curr = res;  // pointer for the copy
-        StringNode cp = str; // pointer for the input
+        if (str == null)
+            return str;
 
-        while (cp.next != null){
-            StringNode next = new StringNode(cp.next.ch, null); // create new node
-            curr.next = next; // point our node to the next
+        StringNode dummy = new StringNode('1', null);
+        StringNode curr = str; // pointer for old
+        StringNode d = dummy; // pointer for new
 
-            //move pointers
+        while (curr != null) {
+            d.next = new StringNode(curr.ch, null);
+
+            d = d.next;
             curr = curr.next;
-            cp = cp.next;           
         }
-        
-        return res;
-            // a,b,c
-            // a
-
-
-        // if (str == null) {
-        //     return null;
-        // }
-
-        // // Create the first node of the copy, copying the
-        // // first character into it.
-        // StringNode copyFirst = new StringNode(str.ch, null);
-
-        // // Make a recursive call to get a copy of the rest,
-        // // and store the result in the first node's next field.
-        // copyFirst.next = copy(str.next);
-        // return copyFirst;
+        return dummy.next;
     }
+
+    // a,b,c
+    // a
+
+    // if (str == null) {
+    // return null;
+    // }
+
+    // // Create the first node of the copy, copying the
+    // // first character into it.
+    // StringNode copyFirst = new StringNode(str.ch, null);
+
+    // // Make a recursive call to get a copy of the rest,
+    // // and store the result in the first node's next field.
+    // copyFirst.next = copy(str.next);
+    // return copyFirst;
+    
 
     /**
      * deleteChar - deletes character i in the given linked-list string and
@@ -182,13 +184,13 @@ public class StringNode {
      * and returns a reference to the resulting list.
      */
     public static StringNode insertSorted(StringNode str, char ch) {
-        if (str == null) return new StringNode(ch,null);
-        if (str.ch >= ch){
+        if (str == null)
+            return new StringNode(ch, null);
+        if (str.ch >= ch) {
             // create a new node and point it curr when curr is creater than ch
-            return new StringNode(ch,str);
-        }
-        else{
-            str.next = insertSorted(str.next,ch);
+            return new StringNode(ch, str);
+        } else {
+            str.next = insertSorted(str.next, ch);
             return str;
         }
     }
@@ -198,6 +200,9 @@ public class StringNode {
      * linked-list string to which str refers
      */
     public static int length(StringNode str) {
+        if (str == null)
+            return 0;
+
         StringNode node = str;
         int i = 0;
         while (node != null) {
@@ -247,18 +252,18 @@ public class StringNode {
      * linked-list string to System.out
      */
     public static void printReverse(StringNode str) {
-        // // their given way 
+        // // their given way
         // if (str == null) {
-        //     return;
+        // return;
         // } else {
-        //     printReverse(str.next);
-        //     System.out.print(str.ch);
+        // printReverse(str.next);
+        // System.out.print(str.ch);
         // }
-        //reverse it
+        // reverse it
         StringNode prev = null;
         StringNode curr = str;
 
-        while (curr != null){
+        while (curr != null) {
             StringNode next = curr.next;
             curr.next = prev;
 
@@ -269,14 +274,14 @@ public class StringNode {
         curr = prev; // the new head
         prev = null;
 
-        //reverse it back and print it on it's way
-        while (curr != null){
+        // reverse it back and print it on it's way
+        while (curr != null) {
             System.out.print(curr.ch);
             StringNode next = curr.next;
             curr.next = prev;
 
             prev = curr;
-            curr = next; 
+            curr = next;
         }
     }
 
@@ -301,44 +306,41 @@ public class StringNode {
      * removes the first occurrence (if any) of the character ch in that string.
      */
     public static StringNode removeFirst(StringNode str, char ch) {
-        if (str == null) return str;
+        if (str == null)
+            return str;
         if (str.ch == ch) {
             return str.next;
-        }
-        else{
-            str.next = removeFirst(str.next,ch);
+        } else {
+            str.next = removeFirst(str.next, ch);
             return str;
         }
     }
-        // StringNode trav = str;
-        // StringNode trail = null; // "trailing" ref; stays one node behind trav
+    // StringNode trav = str;
+    // StringNode trail = null; // "trailing" ref; stays one node behind trav
 
-        // while (trav != null && trav.ch != ch) {
-        //     trail = trav;
-        //     trav = trav.next;
-        // }
+    // while (trav != null && trav.ch != ch) {
+    // trail = trav;
+    // trav = trav.next;
+    // }
 
-        // if (trav == null) {
-        //     // If trav if null, that means ch was not found.
-        //     // We simply return str, since the linked list was unchanged.
-        //     return str;
-        // } else if (trail == null) {
-        //     // If trav is not null and trail is still null, that means the
-        //     // first occurrence of ch is in the first node. Because of this,
-        //     // we return a reference to the second node, because it is now the
-        //     // new first node in the linked list.
-        //     return str.next;
-        // } else {
-        //     // Remove the node containing ch by updating the previous node.
-        //     trail.next = trav.next;
+    // if (trav == null) {
+    // // If trav if null, that means ch was not found.
+    // // We simply return str, since the linked list was unchanged.
+    // return str;
+    // } else if (trail == null) {
+    // // If trav is not null and trail is still null, that means the
+    // // first occurrence of ch is in the first node. Because of this,
+    // // we return a reference to the second node, because it is now the
+    // // new first node in the linked list.
+    // return str.next;
+    // } else {
+    // // Remove the node containing ch by updating the previous node.
+    // trail.next = trav.next;
 
-        //     // The original first node is still the first node,
-        //     // so we just return str.
-        //     return str;
-        // }
-        
-        
-
+    // // The original first node is still the first node,
+    // // so we just return str.
+    // return str;
+    // }
 
     /*
      * toString - creates and returns the Java string that
