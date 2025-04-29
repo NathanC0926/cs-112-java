@@ -1,11 +1,7 @@
 /*
  * LinkedTree.java
  *
- * Computer Science 112
- *
- * Modifications and additions by:
- *     name:
- *     username:
+ * CS 112, Lab 11, Task 3
  */
 
 import java.util.*;
@@ -18,45 +14,43 @@ import java.util.*;
 public class LinkedTree {
     // An inner class for the nodes in the tree
     private class Node {
-        private int key; // the key field
-        private LLList data; // list of data values for this key
-        private Node left; // reference to the left child/subtree
-        private Node right; // reference to the right child/subtree
-        private Node parent; // reference to the parent. NOT YET MAINTAINED!
-
-        private Node(int key, Object data) {
+        private int key;         // the key field
+        private LLList data;     // list of data values for this key
+        private Node left;       // reference to the left child/subtree
+        private Node right;      // reference to the right child/subtree
+        
+        private Node(int key, Object data){
             this.key = key;
             this.data = new LLList();
             this.data.addItem(data, 0);
             this.left = null;
             this.right = null;
-            this.parent = null;
         }
     }
-
+    
     // the root of the tree as a whole
     private Node root;
-
+    
     public LinkedTree() {
         root = null;
     }
-
+    
     /*
      * Prints the keys of the tree in the order given by a preorder traversal.
      * Invokes the recursive preorderPrintTree method to do the work.
      */
     public void preorderPrint() {
         if (root != null) {
-            preorderPrintTree(root);
+            preorderPrintTree(root);      
         }
         System.out.println();
     }
-
+    
     /*
      * Recursively performs a preorder traversal of the tree/subtree
      * whose root is specified, printing the keys of the visited nodes.
-     * Note that the parameter is *not* necessarily the root of the
-     * entire tree.
+     * Note that the parameter is *not* necessarily the root of the 
+     * entire tree. 
      */
     private static void preorderPrintTree(Node root) {
         System.out.print(root.key + " ");
@@ -67,23 +61,23 @@ public class LinkedTree {
             preorderPrintTree(root.right);
         }
     }
-
+    
     /*
      * Prints the keys of the tree in the order given by a postorder traversal.
      * Invokes the recursive postorderPrintTree method to do the work.
      */
     public void postorderPrint() {
         if (root != null) {
-            postorderPrintTree(root);
+            postorderPrintTree(root);      
         }
         System.out.println();
     }
-
+    
     /*
      * Recursively performs a postorder traversal of the tree/subtree
      * whose root is specified, printing the keys of the visited nodes.
-     * Note that the parameter is *not* necessarily the root of the
-     * entire tree.
+     * Note that the parameter is *not* necessarily the root of the 
+     * entire tree. 
      */
     private static void postorderPrintTree(Node root) {
         if (root.left != null) {
@@ -94,23 +88,23 @@ public class LinkedTree {
         }
         System.out.print(root.key + " ");
     }
-
+    
     /*
      * Prints the keys of the tree in the order given by an inorder traversal.
      * Invokes the recursive inorderPrintTree method to do the work.
      */
     public void inorderPrint() {
         if (root != null) {
-            inorderPrintTree(root);
+            inorderPrintTree(root);      
         }
         System.out.println();
     }
-
+    
     /*
      * Recursively performs an inorder traversal of the tree/subtree
      * whose root is specified, printing the keys of the visited nodes.
-     * Note that the parameter is *not* necessarily the root of the
-     * entire tree.
+     * Note that the parameter is *not* necessarily the root of the 
+     * entire tree. 
      */
     private static void inorderPrintTree(Node root) {
         if (root.left != null) {
@@ -121,8 +115,8 @@ public class LinkedTree {
             inorderPrintTree(root.right);
         }
     }
-
-    /*
+   
+    /* 
      * Inner class for temporarily associating a node's depth
      * with the node, so that levelOrderPrint can print the levels
      * of the tree on separate lines.
@@ -130,26 +124,26 @@ public class LinkedTree {
     private class NodePlusDepth {
         private Node node;
         private int depth;
-
+        
         private NodePlusDepth(Node node, int depth) {
             this.node = node;
             this.depth = depth;
         }
     }
-
+    
     /*
      * Prints the keys of the tree in the order given by a
      * level-order traversal.
      */
     public void levelOrderPrint() {
         LLQueue<NodePlusDepth> q = new LLQueue<NodePlusDepth>();
-
+        
         // Insert the root into the queue if the root is not null.
         if (root != null) {
             q.insert(new NodePlusDepth(root, 0));
         }
-
-        // We continue until the queue is empty. At each step,
+            
+        // We continue until the queue is empty.  At each step,
         // we remove an element from the queue, print its value,
         // and insert its children (if any) into the queue.
         // We also keep track of the current level, and add a newline
@@ -157,13 +151,13 @@ public class LinkedTree {
         int level = 0;
         while (!q.isEmpty()) {
             NodePlusDepth item = q.remove();
-
+            
             if (item.depth > level) {
                 System.out.println();
                 level++;
             }
             System.out.print(item.node.key + " ");
-
+            
             if (item.node.left != null) {
                 q.insert(new NodePlusDepth(item.node.left, item.depth + 1));
             }
@@ -187,7 +181,7 @@ public class LinkedTree {
             return n.data;
         }
     }
-
+    
     /*
      * Recursively searches for the specified key in the tree/subtree
      * whose root is specified. Note that the parameter is *not*
@@ -204,7 +198,7 @@ public class LinkedTree {
             return searchTree(root.right, key);
         }
     }
-
+    
     /*
      * Inserts the specified (key, data) pair in the tree so that the
      * tree remains a binary search tree.
@@ -225,10 +219,10 @@ public class LinkedTree {
                 trav = trav.right;
             }
         }
-
+        
         // Insert the new node.
         Node newNode = new Node(key, data);
-        if (parent == null) { // the tree was empty
+        if (parent == null) {    // the tree was empty
             root = newNode;
         } else if (key < parent.key) {
             parent.left = newNode;
@@ -236,10 +230,10 @@ public class LinkedTree {
             parent.right = newNode;
         }
     }
-
+    
     /*
-     * FOR TESTING: Processes the integer keys in the specified array from
-     * left to right, adding a node for each of them to the tree.
+     * FOR TESTING: Processes the integer keys in the specified array from 
+     * left to right, adding a node for each of them to the tree. 
      * The data associated with each key is a string based on the key.
      */
     public void insertKeys(int[] keys) {
@@ -247,7 +241,7 @@ public class LinkedTree {
             insert(keys[i], "data for key " + keys[i]);
         }
     }
-
+    
     /*
      * Deletes the node containing the (key, data) pair with the
      * specified key from the tree and return the associated data item.
@@ -264,9 +258,9 @@ public class LinkedTree {
                 trav = trav.right;
             }
         }
-
+        
         // Delete the node (if any) and return the removed data item.
-        if (trav == null) { // no such key
+        if (trav == null) {   // no such key    
             return null;
         } else {
             LLList removedData = trav.data;
@@ -274,15 +268,15 @@ public class LinkedTree {
             return removedData;
         }
     }
-
+    
     /*
-     * Deletes the node specified by the parameter toDelete. parent
-     * specifies the parent of the node to be deleted.
+     * Deletes the node specified by the parameter toDelete.  parent
+     * specifies the parent of the node to be deleted. 
      */
     private void deleteNode(Node toDelete, Node parent) {
         if (toDelete.left != null && toDelete.right != null) {
             // Case 3: toDelete has two children.
-            // Find a replacement for the item we're deleting -- as well as
+            // Find a replacement for the item we're deleting -- as well as 
             // the replacement's parent.
             // We use the smallest item in toDelete's right subtree as
             // the replacement.
@@ -292,12 +286,12 @@ public class LinkedTree {
                 replaceParent = replace;
                 replace = replace.left;
             }
-
-            // Replace toDelete's key and data with those of the
+            
+            // Replace toDelete's key and data with those of the 
             // replacement item.
             toDelete.key = replace.key;
             toDelete.data = replace.data;
-
+            
             // Recursively delete the replacement item's old node.
             // It has at most one child, so we don't have to
             // worry about infinite recursion.
@@ -308,9 +302,9 @@ public class LinkedTree {
             if (toDelete.left != null) {
                 toDeleteChild = toDelete.left;
             } else {
-                toDeleteChild = toDelete.right; // null if it has no children
+                toDeleteChild = toDelete.right;  // null if it has no children
             }
-
+            
             if (toDelete == root) {
                 root = toDeleteChild;
             } else if (toDelete.key < parent.key) {
@@ -321,199 +315,84 @@ public class LinkedTree {
         }
     }
 
-    /* Returns a preorder iterator for this tree. */
-    public LinkedTreeIterator preorderIterator() {
-        return new PreorderIterator();
-    }
-
     /*
-     * inner class for a preorder iterator
-     * IMPORTANT: You will not be able to actually use objects from this class
-     * to perform a preorder iteration until you have modified the LinkedTree
-     * methods so that they maintain the parent fields in the Nodes.
+     * Computes the sum of the keys in the entire tree.
+     * Invokes the recursive sumKeysTree method to do the work.
      */
-    private class PreorderIterator implements LinkedTreeIterator {
-        private Node nextNode;
-
-        private PreorderIterator() {
-            // The traversal starts with the root node.
-            nextNode = root;
-        }
-
-        public boolean hasNext() {
-            return (nextNode != null);
-        }
-
-        public int next() {
-            if (nextNode == null) {
-                throw new NoSuchElementException();
-            }
-
-            // Store a copy of the key to be returned.
-            int key = nextNode.key;
-
-            // Advance nextNode.
-            if (nextNode.left != null) {
-                nextNode = nextNode.left;
-            } else if (nextNode.right != null) {
-                nextNode = nextNode.right;
-            } else {
-                // We've just visited a leaf node.
-                // Go back up the tree until we find a node
-                // with a right child that we haven't seen yet.
-                Node parent = nextNode.parent;
-                Node child = nextNode;
-                while (parent != null &&
-                        (parent.right == child || parent.right == null)) {
-                    child = parent;
-                    parent = parent.parent;
-                }
-
-                if (parent == null) {
-                    nextNode = null; // the traversal is complete
-                } else {
-                    nextNode = parent.right;
-                }
-            }
-
-            return key;
-        }
+    public int sumKeys() {
+        return sumKeysTree(root);     // pass in the root of the tree as a whole
     }
-
-    /*
-     * "wrapper method" for the recursive depthInTree() method
-     * from PS 7, Problem 4
-     */
-    public int depth(int key) {
-        if (root == null) { // root is the root of the entire tree
-            return -1;
-        }
-
-        return depthInTree(key, root);
-    }
-
-    /*
-     * original version of the recursive depthInTree() method
-     * from PS 7, Problem 4. You will write a more efficient version
-     * of this method.
-     */
-    private static int depthInTree(int key, Node root) {
-        if (key == root.key) {
-            return 0;
-        }
-
-        if (root.left != null) {
-            int depthInLeft = depthInTree(key, root.left);
-            if (depthInLeft != -1) {
-                return depthInLeft + 1;
-            }
-        }
-
-        if (root.right != null) {
-            int depthInRight = depthInTree(key, root.right);
-            if (depthInRight != -1) {
-                return depthInRight + 1;
-            }
-        }
-
-        return -1;
-    }
-
-    public int sumKeysTo(int key) {
-        int res = 0;
-        Node curr = root;
-        while (curr != null) {
-            res += curr.key;
-            if (curr.key == key)
-                return res;
-            else if (curr.key < key)
-                curr = curr.right;
-            else
-                curr = curr.left;
-        }
-        return 0; // shouldn't get here, unless key is not in tree
-    }
-
-    public static int numLeafNodesInTree(Node root) {
-        if (root == null)
-            return 0;
-        if (root.right == null && root.left == null)
-            return 1;
-        return numLeafNodesInTree(root.left) + numLeafNodesInTree(root.right);
-    }
-
-    public int numLeafNodes() {
-        return numLeafNodesInTree(root);
-    }
-
-    public int deleteSmallest() {
-        if (root == null)
-            return -1;
     
-        Node prev = null;
-        Node curr = root;
-
-        while (curr.left != null) {
-            prev = curr;
-            curr = curr.left;
-        }
-        // now curr are at the most left node
-        int res = curr.key;
-        //special case: when the root is the most left 
-        if (prev == null){
-            root = curr.right;
-        }
-        else{
-            if (curr.right != null) {
-                prev.left = curr.right;
-            }
-            else prev.left = null;
-        } 
-        return res;
+    /*
+     * Recursively computes the sum of the keys in the tree/subtree whose 
+     * root is specified. Note that the parameter is *not* necessarily 
+     * the root of the entire tree. 
+     */
+    public static int sumKeysTree(Node root) {
+        /*** LAB 11: IMPLEMENT THIS METHOD ***/
+        return 0;
     }
-
+    
+    /*
+     * Iteratively computes the sum of even keys along the path from 
+     * the root to the node containing the specified key (if any).
+     * If the specified key is not in the tree, the method returns 
+     * the number of even keys along the path used to determine that the 
+     * key is missing.
+     */
+    public int numEvensAlongPath(int key) {
+        /*** LAB 11: IMPLEMENT THIS METHOD ***/
+        return 0;
+    }
+    
     public static void main(String[] args) {
-        System.out.println("--- Testing depth()/depthInTree() from Problem 4 ---");
-        System.out.println();
-        System.out.println("(0) Testing on tree from Problem 3, depth of 28 node");
-        try {
-            LinkedTree tree = new LinkedTree();
-            int[] keys = { 44, 35, 53, 23, 48, 62, 28, 57, 80 };
-            tree.insertKeys(keys);
-
-            int results = tree.depth(28);
-            System.out.println("actual results:");
-            System.out.println(results);
-            System.out.println("expected results:");
-            System.out.println(3);
-            System.out.print("MATCHES EXPECTED RESULTS?: ");
-            System.out.println(results == 3);
-        } catch (Exception e) {
-            System.out.println("INCORRECTLY THREW AN EXCEPTION: " + e);
-        }
-
-        System.out.println(); // include a blank line between tests
-
+        Scanner in = new Scanner(System.in);
+        
         LinkedTree tree = new LinkedTree();
-        System.out.println("empty tree: " + tree.deleteSmallest());
-        System.out.println();
-
-        int[] keys = { 37, 26, 42, 13, 35, 56, 30, 47, 70 };
-        tree.insertKeys(keys);
-        tree.levelOrderPrint();
-        System.out.println();
-
-        System.out.println("first deletion: " + tree.deleteSmallest());
-        tree.levelOrderPrint();
-        System.out.println();
-
-        System.out.println("second deletion: " + tree.deleteSmallest());
-        tree.levelOrderPrint();
-        /*
-         * Add at least two unit tests for each method from Problem 6.
-         * Test a variety of different cases.
-         * Follow the same format that we have used above.
-         */
-
+        tree.insert(7, "root node");
+        tree.insert(9, "7's right child");
+        tree.insert(5, "7's left child");
+        tree.insert(2, "5's left child");
+        tree.insert(8, "9's left child");
+        tree.insert(6, "5's right child");
+        tree.insert(4, "2's right child");
+        
+        System.out.print(" preorder: ");
+        tree.preorderPrint();
+        
+        System.out.print("postorder: ");
+        tree.postorderPrint();
+        
+        System.out.print("  inorder: ");
+        tree.inorderPrint();
+        
+        System.out.print("\nkey to search for: ");
+        int key = in.nextInt();
+        in.nextLine();
+        Object data = tree.search(key);
+        if (data != null) {
+            System.out.println(key + " = " + data);
+        } else {
+            System.out.println("no such key in tree");
+        }
+        
+        System.out.print("\nkey to delete: ");
+        key = in.nextInt();
+        in.nextLine();
+        data = tree.delete(key);
+        if (data != null) {
+            System.out.println("removed " + data);
+        } else {
+            System.out.println("no such key in tree");
+        }
+        
+        System.out.print("\n preorder: ");
+        tree.preorderPrint();
+        
+        System.out.print("postorder: ");
+        tree.postorderPrint();
+        
+        System.out.print("  inorder: ");
+        tree.inorderPrint();
     }
 }

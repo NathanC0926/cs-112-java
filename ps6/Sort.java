@@ -1,27 +1,11 @@
 package ps6;
 import java.util.Arrays;
-/*
- * Sort.java
- *
- * Computer Science 112, Boston University
- * 
- * 
- * *** Your solution should NOT go in this file. ***
- * *** It should go in SortCount.java instead. ***
- */
 
-/**
- * Sort - a class containing implementations of various array-sorting
- * algorithms.  Each method takes an array of ints.  The methods
- * assume that the array is full.  They sort the array in place,
- * altering the original array.
- */
 public class Sort {
     public static final int NUM_ELEMENTS = 8;
     
     /*
      * swap - swap the values of arr[a] and arr[b].
-     * Used by several of the sorting algorithms below.
      */
     private static void swap(int[] arr, int a, int b) {
         int temp = arr[a];
@@ -32,7 +16,6 @@ public class Sort {
     /*
      * indexSmallest - returns the index of the smallest element
      * in the subarray from arr[start] to the end of the array.  
-     * Used by selectionSort.
      */
     private static int indexSmallest(int[] arr, int start) {
         int indexMin = start;
@@ -46,16 +29,21 @@ public class Sort {
         return indexMin;
     }
     
-    /** selectionSort */
+    /** selectionSort with tracking after each pass */
     public static void selectionSort(int[] arr) {
+        System.out.println("Selection Sort - initial array: " + Arrays.toString(arr));
+        
         for (int i = 0; i < arr.length - 1; i++) {
             int j = indexSmallest(arr, i);
             swap(arr, i, j);
+            System.out.println("Selection Sort - after pass " + (i+1) + ": " + Arrays.toString(arr));
         }
     }
     
-    /** insertionSort */
+    /** insertionSort with tracking after each iteration */
     public static void insertionSort(int[] arr) {
+        System.out.println("\nInsertion Sort - initial array: " + Arrays.toString(arr));
+        
         for (int i = 1; i < arr.length; i++) {
             if (arr[i] < arr[i-1]) {
                 // Save a copy of the element to be inserted.
@@ -71,50 +59,21 @@ public class Sort {
                 // Put the element in place.
                 arr[j] = toInsert;
             }
+            System.out.println("Insertion Sort - after iteration " + i + ": " + Arrays.toString(arr));
         }
     }
     
-    /** shellSort */
-    public static void shellSort(int[] arr) {
-        /*
-         * Find initial increment: one less than the largest
-         * power of 2 that is <= the number of objects.
-         */
-        int incr = 1;
-        while (2 * incr <= arr.length)
-            incr = 2 * incr;
-        incr = incr - 1;
-        
-        /* Do insertion sort for each increment. */
-        while (incr >= 1) {
-            for (int i = incr; i < arr.length; i++) {
-                if (arr[i] < arr[i-incr]) {
-                    int toInsert = arr[i];
-                    
-                    int j = i;
-                    do {
-                        arr[j] = arr[j - incr];
-                        j = j - incr;
-                    } while (j > incr-1 &&
-                             toInsert < arr[j-incr]);
-                    
-                    arr[j] = toInsert;
-                }
-            }
-            
-            // Calculate increment for next pass.
-            incr = incr / 2;
-        }
-    }
-    
-    /** bubbleSort */
+    /** bubbleSort with tracking after each pass */
     public static void bubbleSort(int[] arr) {
+        System.out.println("\nBubble Sort - initial array: " + Arrays.toString(arr));
+        
         for (int i = arr.length - 1; i > 0; i--) {
             for (int j = 0; j < i; j++) {
                 if (arr[j] > arr[j+1]) {
                     swap(arr, j, j+1);
                 }
             }
+            System.out.println("Bubble Sort - after pass " + (arr.length - i) + ": " + Arrays.toString(arr));
         }
     }
     
@@ -129,22 +88,30 @@ public class Sort {
             do {i++;} while (arr[i] < pivot);
             // moving from right to left, find an element <= the pivot
             do {j--;} while (arr[j] > pivot); 
-            // If the indices still haven't met or crossed,
-            // swap the elements so that they end up in the correct subarray.
-            // Otherwise, the partition is complete and we return j.
+            
             if (i < j) {
                 swap(arr, i, j);
             }
-
-        } while ( i < j );
-        System.out.println(Arrays.toString(arr));
-
-	return(j);
+        } while (i < j);
+        
+        return j;
     }
     
-    /* qSort - recursive method that does the work for quickSort */
+    // Track partition call count for quickSort
+    private static int partitionCallCount = 0;
+    
+    /* qSort - recursive method with tracking */
     private static void qSort(int[] arr, int first, int last) {
+        partitionCallCount++;
+        int currentCallNumber = partitionCallCount;
+        
+        System.out.println("QuickSort - before partition call " + currentCallNumber + 
+                         " (first=" + first + ", last=" + last + "): " + Arrays.toString(arr));
+        
         int split = partition(arr, first, last);
+        
+        System.out.println("QuickSort - after partition call " + currentCallNumber + 
+                         " (pivot index=" + split + "): " + Arrays.toString(arr));
         
         if (first < split) {
             qSort(arr, first, split);      // left subarray
@@ -154,15 +121,28 @@ public class Sort {
         }
     }
     
-    /** quicksort */
+    /** quicksort - reset call counter */
     public static void quickSort(int[] arr) {
+        System.out.println("\nQuickSort - initial array: " + Arrays.toString(arr));
+        partitionCallCount = 0;
         qSort(arr, 0, arr.length - 1); 
     }
     
-    /* merge - helper method for mergesort */
+    // Track merge call count for mergeSort
+    private static int mergeCallCount = 0;
+    
+    /* merge - helper method for mergesort with tracking */
     private static void merge(int[] arr, int[] temp, 
       int leftStart, int leftEnd, int rightStart, int rightEnd)
     {
+        mergeCallCount++;
+        int currentCallNumber = mergeCallCount;
+        
+        System.out.println("MergeSort - before merge call " + currentCallNumber + 
+                         " (leftRange=" + leftStart + "-" + leftEnd + 
+                         ", rightRange=" + rightStart + "-" + rightEnd + "): " + 
+                         Arrays.toString(arr));
+        
         int i = leftStart;    // index into left subarray
         int j = rightStart;   // index into right subarray
         int k = leftStart;    // index into temp
@@ -189,8 +169,9 @@ public class Sort {
         for (i = leftStart; i <= rightEnd; i++) {
             arr[i] = temp[i];
         }
-        System.out.println(Arrays.toString(arr));
-
+        
+        System.out.println("MergeSort - after merge call " + currentCallNumber + ": " + 
+                         Arrays.toString(arr));
     }
     
     /** mSort - recursive method for mergesort */
@@ -205,69 +186,43 @@ public class Sort {
         merge(arr, temp, start, middle, middle + 1, end);
     }
     
-    /** mergesort */
+    /** mergesort - reset call counter */
     public static void mergeSort(int[] arr) {
+        System.out.println("\nMergeSort - initial array: " + Arrays.toString(arr));
+        mergeCallCount = 0;
         int[] temp = new int[arr.length];
         mSort(arr, temp, 0, arr.length - 1);
     }
     
-    /**
-     * printArray - prints the specified array in the following form:
-     * { arr[0] arr[1] ... }
-     */
-    public static void printArray(int[] arr) {
-        System.out.print("{ ");
+    public static void main(String[] args) { 
+        int[] array = {14, 7, 27, 13, 24, 20, 10, 33};
+        System.out.println("Original array: " + Arrays.toString(array));
+        System.out.println("----------------------------------------------");
         
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
+        // Test selection sort
+        int[] selArray = Arrays.copyOf(array, array.length);
+        selectionSort(selArray);
+        System.out.println("----------------------------------------------");
         
-        System.out.println("}");
-    }
-    
-    public static void main(String[] arr) { 
-        int[] orig = {24, 3, 27, 13, 34, 2, 50, 12};
-        // for (int i = 0; i < NUM_ELEMENTS; i++) {
-        //     orig[i] = (int)(50 * Math.random());
-        // }
-        printArray(orig);
+        // Test insertion sort
+        int[] insArray = Arrays.copyOf(array, array.length);
+        insertionSort(insArray);
+        System.out.println("----------------------------------------------");
         
-        int[] copy = {24, 3, 27, 13, 34, 2, 50, 12};
+        // Test bubble sort
+        int[] bubArray = Arrays.copyOf(array, array.length);
+        bubbleSort(bubArray);
+        System.out.println("----------------------------------------------");
         
-        /* selection sort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        selectionSort(copy);
-        System.out.print("selection sort:\t");
-        printArray(copy);
+        // Test quicksort
+        int[] quickArray = Arrays.copyOf(array, array.length);
+        quickSort(quickArray);
+        System.out.println("----------------------------------------------");
         
-        /* insertion sort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        insertionSort(copy);
-        System.out.print("insertion sort:\t");
-        printArray(copy);
+        // Test mergesort
+        int[] mergeArray = Arrays.copyOf(array, array.length);
+        mergeSort(mergeArray);
+        System.out.println("----------------------------------------------");
         
-        /* Shell sort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        shellSort(copy);
-        System.out.print("Shell sort:\t");
-        printArray(copy);
-        
-        /* bubble sort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        bubbleSort(copy);
-        System.out.print("bubble sort:\t");
-        printArray(copy);
-        
-        /* quicksort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        quickSort(copy);
-        System.out.print("quicksort:\t");
-        printArray(copy);
-        
-        /* mergesort */
-        System.arraycopy(orig, 0, copy, 0, orig.length); 
-        mergeSort(copy);
-        System.out.print("mergesort:\t");
-        printArray(copy);
     }
 }
